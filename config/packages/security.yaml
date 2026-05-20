@@ -1,0 +1,28 @@
+security:
+    password_hashers:
+        App\Entity\User:
+            algorithm: bcrypt
+            cost: 12
+
+    providers:
+        app_user_provider:
+            id: App\Security\UserProvider
+
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+        api:
+            pattern: ^/api
+            stateless: true
+            provider: app_user_provider
+            custom_authenticators:
+                - App\Security\JwtAuthenticator
+
+    access_control:
+        - { path: ^/api/v1/auth/register, roles: PUBLIC_ACCESS }
+        - { path: ^/api/v1/auth/login, roles: PUBLIC_ACCESS }
+        - { path: ^/api/v1/auth/refresh, roles: PUBLIC_ACCESS }
+        - { path: ^/api/v1/payment/webhook, roles: PUBLIC_ACCESS }
+        - { path: ^/api/v1/admin, roles: ROLE_ADMIN }
+        - { path: ^/api/v1, roles: ROLE_USER }

@@ -1,0 +1,46 @@
+parameters:
+    jwt_ttl: '%env(int:JWT_TTL)%'
+    jwt_refresh_ttl: '%env(int:JWT_REFRESH_TTL)%'
+
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    App\:
+        resource: '../src/'
+        exclude:
+            - '../src/DependencyInjection/'
+            - '../src/Entity/'
+            - '../src/Kernel.php'
+
+    App\Service\OtpService:
+        arguments:
+            $otpTtl: '%env(int:OTP_TTL)%'
+            $otpLength: '%env(int:OTP_LENGTH)%'
+            $maxAttempts: '%env(int:OTP_MAX_ATTEMPTS)%'
+            $resendCooldown: '%env(int:OTP_RESEND_COOLDOWN)%'
+
+    App\Service\PaymentService:
+        arguments:
+            $keyId: '%env(RAZORPAY_KEY_ID)%'
+            $keySecret: '%env(RAZORPAY_KEY_SECRET)%'
+            $webhookSecret: '%env(RAZORPAY_WEBHOOK_SECRET)%'
+
+    App\Service\JwtService:
+        arguments:
+            $privateKeyPath: '%kernel.project_dir%/config/jwt/private.pem'
+            $publicKeyPath: '%kernel.project_dir%/config/jwt/public.pem'
+            $cache: '@cache.app'
+            $accessTtl: '%jwt_ttl%'
+            $refreshTtl: '%jwt_refresh_ttl%'
+
+    App\MessageHandler\SendEmailHandler:
+        arguments:
+            $mailerFrom: '%env(MAILER_FROM)%'
+
+    App\MessageHandler\SendSmsHandler:
+        arguments:
+            $twilioSid:   '%env(TWILIO_ACCOUNT_SID)%'
+            $twilioToken: '%env(TWILIO_AUTH_TOKEN)%'
+            $twilioFrom:  '%env(TWILIO_PHONE_NUMBER)%'
