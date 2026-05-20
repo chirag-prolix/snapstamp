@@ -66,15 +66,18 @@ class RewardService
     }
 
     public function listActiveRewards(
-        ?string $merchantId,
-        ?float  $lat    = null,
-        ?float  $lon    = null,
-        float   $radius = 10.0
+        ?string   $merchantId,
+        ?float    $lat      = null,
+        ?float    $lon      = null,
+        float     $radius   = 10.0,
+        ?Customer $customer = null
     ): array {
+        $stampCountByMerchant = $this->buildStampCountMap($customer);
+
         if ($lat !== null && $lon !== null) {
             $results = $this->rewardRepository->findNearbyWithDistance($lat, $lon, $radius);
             return array_map(fn(array $item) => array_merge(
-                $this->serializeReward($item['reward']),
+                $this->serializeReward($item['reward'], $stampCountByMerchant),
                 ['distanceKm' => $item['distanceKm']]
             ), $results);
         }
@@ -84,7 +87,23 @@ class RewardService
             $filters['merchant_id'] = $merchantId;
         }
         $rewards = $this->rewardRepository->search($filters);
-        return array_map(fn(Reward $r) => $this->serializeReward($r), $rewards);
+        return array_map(fn(Reward $r) => $this->serializeReward($r, $stampCountByMerchant), $rewards);
+    }
+
+    private function buildStampCountMap(?Customer $customer): array
+    {
+        if ($customer === null) {
+            return [];
+        }
+        $map = [];
+        foreach ($this->stampCardRepository->findByCustomer($customer) as $card) {
+            $mid = $card->getMerchant()->getId();
+            $count = $card->getCurrentStampCount();
+            if (!isset($map[$mid]) || $count > $map[$mid]) {
+                $map[$mid] = $count;
+            }
+        }
+        return $map;
     }
 
     public function redeemReward(Customer $customer, string $rewardId): array
@@ -181,9 +200,10 @@ class RewardService
         return array_map(fn(RewardRedemption $r) => $this->serializeRedemption($r), $redemptions);
     }
 
-    public function serializeReward(Reward $reward): array
+    public function serializeReward(Reward $reward, array $stampCountByMerchant = []): array
     {
-        return [
+        $mid = $reward->getMerchant()->getId();
+        $data = [
             'id'                  => $reward->getId(),
             'title'               => $reward->getTitle(),
             'description'         => $reward->getDescription(),
@@ -199,6 +219,12 @@ class RewardService
             'imageUrl'            => $reward->getImageUrl(),
             'createdAt'           => $reward->getCreatedAt()->format(\DateTimeInterface::ATOM),
         ];
+
+        if ($stampCountByMerchant !== []) {
+            $data['customerStampCount'] = $stampCountByMerchant[$mid] ?? 0;
+        }
+
+        return $data;
     }
 
     public function serializeRedemption(RewardRedemption $redemption): array

@@ -24,10 +24,13 @@ class CustomerRewardController extends AbstractController
         $lon        = $request->query->has('lon') ? (float) $request->query->get('lon') : null;
         $radius     = (float) $request->query->get('radius', 10);
 
+        /** @var Customer $customer */
+        $customer = $this->getUser();
+
         return $this->json([
             'success' => true,
             'message' => 'OK',
-            'data'    => $this->rewardService->listActiveRewards($merchantId, $lat, $lon, $radius),
+            'data'    => $this->rewardService->listActiveRewards($merchantId, $lat, $lon, $radius, $customer),
         ]);
     }
 
