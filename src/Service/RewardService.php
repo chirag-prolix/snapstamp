@@ -73,11 +73,12 @@ class RewardService
         ?Customer $customer = null
     ): array {
         $stampCountByMerchant = $this->buildStampCountMap($customer);
+        $pendingRedemptionSet = $this->buildPendingRedemptionSet($customer);
 
         if ($lat !== null && $lon !== null) {
             $results = $this->rewardRepository->findNearbyWithDistance($lat, $lon, $radius);
             return array_map(fn(array $item) => array_merge(
-                $this->serializeReward($item['reward'], $stampCountByMerchant),
+                $this->serializeReward($item['reward'], $stampCountByMerchant, $pendingRedemptionSet),
                 ['distanceKm' => $item['distanceKm']]
             ), $results);
         }
@@ -87,7 +88,7 @@ class RewardService
             $filters['merchant_id'] = $merchantId;
         }
         $rewards = $this->rewardRepository->search($filters);
-        return array_map(fn(Reward $r) => $this->serializeReward($r, $stampCountByMerchant), $rewards);
+        return array_map(fn(Reward $r) => $this->serializeReward($r, $stampCountByMerchant, $pendingRedemptionSet), $rewards);
     }
 
     private function buildStampCountMap(?Customer $customer): array
@@ -104,6 +105,15 @@ class RewardService
             }
         }
         return $map;
+    }
+
+    private function buildPendingRedemptionSet(?Customer $customer): array
+    {
+        if ($customer === null) {
+            return [];
+        }
+        $pending = $this->redemptionRepository->findPendingByCustomer($customer);
+        return array_flip(array_map(fn(RewardRedemption $r) => $r->getReward()->getId(), $pending));
     }
 
     public function redeemReward(Customer $customer, string $rewardId): array
@@ -200,7 +210,7 @@ class RewardService
         return array_map(fn(RewardRedemption $r) => $this->serializeRedemption($r), $redemptions);
     }
 
-    public function serializeReward(Reward $reward, array $stampCountByMerchant = []): array
+    public function serializeReward(Reward $reward, array $stampCountByMerchant = [], array $pendingRedemptionSet = []): array
     {
         $mid = $reward->getMerchant()->getId();
         $data = [
@@ -222,6 +232,10 @@ class RewardService
 
         if ($stampCountByMerchant !== []) {
             $data['customerStampCount'] = $stampCountByMerchant[$mid] ?? 0;
+        }
+
+        if ($pendingRedemptionSet !== []) {
+            $data['hasActiveRedemption'] = isset($pendingRedemptionSet[$reward->getId()]);
         }
 
         return $data;

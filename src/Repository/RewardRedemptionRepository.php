@@ -54,6 +54,17 @@ class RewardRedemptionRepository extends ServiceEntityRepository
             ->getOneOrNullResult();
     }
 
+    public function findPendingByCustomer(Customer $customer): array
+    {
+        return $this->createQueryBuilder('rr')
+            ->where('rr.customer = :customer')
+            ->andWhere('rr.status = :status')
+            ->setParameter('customer', $customer)
+            ->setParameter('status', RewardRedemptionStatusEnum::PENDING)
+            ->getQuery()
+            ->getResult();
+    }
+
     public function findByMerchant(Merchant $merchant): array
     {
         return $this->createQueryBuilder('rr')
