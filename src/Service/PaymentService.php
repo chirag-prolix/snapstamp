@@ -176,6 +176,17 @@ class PaymentService
             // Unknown payment method — skip rather than fail
         }
 
+        $merchant = $payment->getMerchant();
+        if ($merchant !== null) {
+            $plan     = $payment->getMetadata()['plan'] ?? 'monthly';
+            $interval = $plan === 'annual' ? '+365 days' : '+30 days';
+            $now      = new \DateTimeImmutable();
+            $base     = ($merchant->getSubscriptionExpiresAt() !== null && $merchant->getSubscriptionExpiresAt() > $now)
+                ? $merchant->getSubscriptionExpiresAt()
+                : $now;
+            $merchant->setSubscriptionExpiresAt($base->modify($interval));
+        }
+
         $this->logger->info('Payment captured', [
             'payment_id' => $paymentData['id'],
             'order_id'   => $paymentData['order_id'],

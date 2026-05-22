@@ -199,11 +199,14 @@ class AuthService
             $data['tier']         = $user->getTier();
             $data['referralCode'] = $user->getReferralCode();
         } elseif ($user instanceof Merchant) {
-            $data['type']             = 'merchant';
-            $data['businessName']     = $user->getBusinessName();
-            $data['onboardingStatus'] = $user->getOnboardingStatus()->value;
-            $data['isVerified']       = $user->isVerified();
-            $data['apiKey']           = $user->getApiKey();
+            $data['type']                   = 'merchant';
+            $data['businessName']           = $user->getBusinessName();
+            $data['onboardingStatus']       = $user->getOnboardingStatus()->value;
+            $data['isVerified']             = $user->isVerified();
+            $data['apiKey']                 = $user->getApiKey();
+            $data['trialEndsAt']            = $user->getTrialEndsAt()->format(\DateTimeInterface::ATOM);
+            $data['subscriptionExpiresAt']  = $user->getSubscriptionExpiresAt()?->format(\DateTimeInterface::ATOM);
+            $data['hasActiveAccess']        = $user->hasActiveAccess();
         }
 
         return $data;

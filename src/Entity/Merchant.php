@@ -110,6 +110,15 @@ class Merchant extends User
     private ?\DateTimeImmutable $lastApiAccessAt = null;
 
     #[ORM\Column(type: 'datetime_immutable')]
+    private \DateTimeImmutable $trialStartedAt;
+
+    #[ORM\Column(type: 'datetime_immutable')]
+    private \DateTimeImmutable $trialEndsAt;
+
+    #[ORM\Column(type: 'datetime_immutable', nullable: true)]
+    private ?\DateTimeImmutable $subscriptionExpiresAt = null;
+
+    #[ORM\Column(type: 'datetime_immutable')]
     private \DateTimeImmutable $termsAcceptedAt;
 
     #[ORM\Column(type: 'json')]
@@ -131,6 +140,8 @@ class Merchant extends User
         $this->rewards = new ArrayCollection();
         $this->notifications = new ArrayCollection();
         $this->termsAcceptedAt = new \DateTimeImmutable();
+        $this->trialStartedAt = new \DateTimeImmutable();
+        $this->trialEndsAt = new \DateTimeImmutable('+30 days');
         $this->setRoles(['ROLE_MERCHANT']);
     }
 
@@ -472,6 +483,42 @@ class Merchant extends User
     {
         $this->preferences = $preferences;
         return $this;
+    }
+
+    public function getTrialStartedAt(): \DateTimeImmutable
+    {
+        return $this->trialStartedAt;
+    }
+
+    public function getTrialEndsAt(): \DateTimeImmutable
+    {
+        return $this->trialEndsAt;
+    }
+
+    public function setTrialEndsAt(\DateTimeImmutable $trialEndsAt): self
+    {
+        $this->trialEndsAt = $trialEndsAt;
+        return $this;
+    }
+
+    public function getSubscriptionExpiresAt(): ?\DateTimeImmutable
+    {
+        return $this->subscriptionExpiresAt;
+    }
+
+    public function setSubscriptionExpiresAt(?\DateTimeImmutable $subscriptionExpiresAt): self
+    {
+        $this->subscriptionExpiresAt = $subscriptionExpiresAt;
+        return $this;
+    }
+
+    public function hasActiveAccess(): bool
+    {
+        $now = new \DateTimeImmutable();
+        if ($now <= $this->trialEndsAt) {
+            return true;
+        }
+        return $this->subscriptionExpiresAt !== null && $now <= $this->subscriptionExpiresAt;
     }
 
     public function getStampCards(): Collection
