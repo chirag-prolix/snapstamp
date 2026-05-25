@@ -5,6 +5,7 @@ namespace App\Controller\Api;
 use App\Dto\Merchant\UpdateMerchantProfileDto;
 use App\Entity\Merchant;
 use App\Service\MerchantOnboardingService;
+use OpenApi\Attributes as OA;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,6 +16,7 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 #[Route('/api/v1/merchant')]
 #[IsGranted('ROLE_MERCHANT')]
+#[OA\Tag(name: 'Merchant')]
 class MerchantController extends AbstractController
 {
     public function __construct(
@@ -23,6 +25,14 @@ class MerchantController extends AbstractController
     ) {}
 
     #[Route('/profile', methods: ['GET'])]
+    #[OA\Get(
+        path: '/api/v1/merchant/profile',
+        summary: 'Get the authenticated merchant profile',
+        responses: [
+            new OA\Response(response: 200, description: 'Merchant profile including apiKey'),
+            new OA\Response(response: 401, description: 'Unauthorized'),
+        ]
+    )]
     public function getProfile(): JsonResponse
     {
         /** @var Merchant $merchant */
@@ -35,6 +45,33 @@ class MerchantController extends AbstractController
     }
 
     #[Route('/profile', methods: ['PATCH'])]
+    #[OA\Patch(
+        path: '/api/v1/merchant/profile',
+        summary: 'Update merchant profile fields',
+        requestBody: new OA\RequestBody(
+            required: true,
+            content: new OA\JsonContent(
+                properties: [
+                    new OA\Property(property: 'businessDescription', type: 'string', nullable: true),
+                    new OA\Property(property: 'city', type: 'string', nullable: true),
+                    new OA\Property(property: 'state', type: 'string', nullable: true),
+                    new OA\Property(property: 'address', type: 'string', nullable: true),
+                    new OA\Property(property: 'postalCode', type: 'string', nullable: true),
+                    new OA\Property(property: 'phoneForBusiness', type: 'string', nullable: true),
+                    new OA\Property(property: 'website', type: 'string', format: 'uri', nullable: true),
+                    new OA\Property(property: 'webhookUrl', type: 'string', format: 'uri', nullable: true),
+                    new OA\Property(property: 'verificationDocuments', type: 'array', items: new OA\Items(type: 'string'), nullable: true),
+                    new OA\Property(property: 'latitude', type: 'number', format: 'float', nullable: true),
+                    new OA\Property(property: 'longitude', type: 'number', format: 'float', nullable: true),
+                ]
+            )
+        ),
+        responses: [
+            new OA\Response(response: 200, description: 'Updated merchant profile'),
+            new OA\Response(response: 400, description: 'Validation error'),
+            new OA\Response(response: 401, description: 'Unauthorized'),
+        ]
+    )]
     public function updateProfile(Request $request): JsonResponse
     {
         /** @var Merchant $merchant */

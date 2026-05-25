@@ -15,6 +15,7 @@
         "doctrine/doctrine-migrations-bundle": "^3.3",
         "doctrine/orm": "^3.0",
         "firebase/php-jwt": "^6.0",
+        "nelmio/api-doc-bundle": "^4.33",
         "nelmio/cors-bundle": "^2.6",
         "predis/predis": "^2.0",
         "ramsey/uuid": "^4.7",

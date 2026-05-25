@@ -8,6 +8,7 @@ use App\Dto\Auth\RegisterCustomerDto;
 use App\Dto\Auth\RegisterMerchantDto;
 use App\Entity\User;
 use App\Service\AuthService;
+use OpenApi\Attributes as OA;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,6 +18,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 #[Route('/api/v1/auth')]
+#[OA\Tag(name: 'Auth')]
 class AuthController extends AbstractController
 {
     public function __construct(
@@ -25,6 +27,30 @@ class AuthController extends AbstractController
     ) {}
 
     #[Route('/register/customer', methods: ['POST'])]
+    #[OA\Post(
+        path: '/api/v1/auth/register/customer',
+        summary: 'Register a new customer',
+        security: [],
+        requestBody: new OA\RequestBody(
+            required: true,
+            content: new OA\JsonContent(
+                required: ['email', 'password', 'firstName', 'lastName', 'phone'],
+                properties: [
+                    new OA\Property(property: 'email', type: 'string', format: 'email', example: 'user@example.com'),
+                    new OA\Property(property: 'password', type: 'string', minLength: 8, example: 'secret123'),
+                    new OA\Property(property: 'firstName', type: 'string', example: 'Jane'),
+                    new OA\Property(property: 'lastName', type: 'string', example: 'Doe'),
+                    new OA\Property(property: 'phone', type: 'string', example: '+919876543210'),
+                    new OA\Property(property: 'referralCode', type: 'string', nullable: true, example: 'ABC123'),
+                ]
+            )
+        ),
+        responses: [
+            new OA\Response(response: 201, description: 'Customer registered, tokens returned'),
+            new OA\Response(response: 400, description: 'Validation error'),
+            new OA\Response(response: 409, description: 'Email already registered'),
+        ]
+    )]
     public function registerCustomer(Request $request): JsonResponse
     {
         $dto = $this->hydrate(new RegisterCustomerDto(), $request);
@@ -43,6 +69,39 @@ class AuthController extends AbstractController
     }
 
     #[Route('/register/merchant', methods: ['POST'])]
+    #[OA\Post(
+        path: '/api/v1/auth/register/merchant',
+        summary: 'Register a new merchant',
+        security: [],
+        requestBody: new OA\RequestBody(
+            required: true,
+            content: new OA\JsonContent(
+                required: ['email', 'password', 'firstName', 'lastName', 'phone', 'businessName', 'city', 'state', 'address', 'phoneForBusiness', 'taxId', 'bankAccountNumber', 'bankIfscCode', 'bankAccountHolderName', 'termsAccepted'],
+                properties: [
+                    new OA\Property(property: 'email', type: 'string', format: 'email'),
+                    new OA\Property(property: 'password', type: 'string', minLength: 8),
+                    new OA\Property(property: 'firstName', type: 'string'),
+                    new OA\Property(property: 'lastName', type: 'string'),
+                    new OA\Property(property: 'phone', type: 'string', example: '+919876543210'),
+                    new OA\Property(property: 'businessName', type: 'string'),
+                    new OA\Property(property: 'city', type: 'string'),
+                    new OA\Property(property: 'state', type: 'string'),
+                    new OA\Property(property: 'address', type: 'string'),
+                    new OA\Property(property: 'phoneForBusiness', type: 'string', example: '+919876543210'),
+                    new OA\Property(property: 'taxId', type: 'string'),
+                    new OA\Property(property: 'bankAccountNumber', type: 'string'),
+                    new OA\Property(property: 'bankIfscCode', type: 'string', example: 'HDFC0001234'),
+                    new OA\Property(property: 'bankAccountHolderName', type: 'string'),
+                    new OA\Property(property: 'termsAccepted', type: 'boolean', example: true),
+                ]
+            )
+        ),
+        responses: [
+            new OA\Response(response: 201, description: 'Merchant registered (pending approval)'),
+            new OA\Response(response: 400, description: 'Validation error'),
+            new OA\Response(response: 409, description: 'Email already registered'),
+        ]
+    )]
     public function registerMerchant(Request $request): JsonResponse
     {
         $dto = $this->hydrate(new RegisterMerchantDto(), $request);
@@ -61,6 +120,26 @@ class AuthController extends AbstractController
     }
 
     #[Route('/login', methods: ['POST'])]
+    #[OA\Post(
+        path: '/api/v1/auth/login',
+        summary: 'Login and receive JWT tokens',
+        security: [],
+        requestBody: new OA\RequestBody(
+            required: true,
+            content: new OA\JsonContent(
+                required: ['email', 'password'],
+                properties: [
+                    new OA\Property(property: 'email', type: 'string', format: 'email', example: 'user@example.com'),
+                    new OA\Property(property: 'password', type: 'string', example: 'secret123'),
+                ]
+            )
+        ),
+        responses: [
+            new OA\Response(response: 200, description: 'Login successful, tokens returned'),
+            new OA\Response(response: 400, description: 'Validation error'),
+            new OA\Response(response: 401, description: 'Invalid credentials'),
+        ]
+    )]
     public function login(Request $request): JsonResponse
     {
         $dto = $this->hydrate(new LoginDto(), $request);
@@ -83,6 +162,24 @@ class AuthController extends AbstractController
     }
 
     #[Route('/refresh', methods: ['POST'])]
+    #[OA\Post(
+        path: '/api/v1/auth/refresh',
+        summary: 'Refresh access token using refresh token',
+        security: [],
+        requestBody: new OA\RequestBody(
+            required: true,
+            content: new OA\JsonContent(
+                required: ['refreshToken'],
+                properties: [
+                    new OA\Property(property: 'refreshToken', type: 'string'),
+                ]
+            )
+        ),
+        responses: [
+            new OA\Response(response: 200, description: 'New access and refresh tokens'),
+            new OA\Response(response: 401, description: 'Invalid or expired refresh token'),
+        ]
+    )]
     public function refresh(Request $request): JsonResponse
     {
         $dto = $this->hydrate(new RefreshTokenDto(), $request);
@@ -102,6 +199,14 @@ class AuthController extends AbstractController
 
     #[Route('/logout', methods: ['POST'])]
     #[IsGranted('ROLE_USER')]
+    #[OA\Post(
+        path: '/api/v1/auth/logout',
+        summary: 'Invalidate the current access token',
+        responses: [
+            new OA\Response(response: 200, description: 'Logged out successfully'),
+            new OA\Response(response: 401, description: 'Unauthorized'),
+        ]
+    )]
     public function logout(Request $request): JsonResponse
     {
         $rawToken = substr($request->headers->get('Authorization', ''), 7);
@@ -112,6 +217,14 @@ class AuthController extends AbstractController
 
     #[Route('/me', methods: ['GET'])]
     #[IsGranted('ROLE_USER')]
+    #[OA\Get(
+        path: '/api/v1/auth/me',
+        summary: 'Get the authenticated user profile',
+        responses: [
+            new OA\Response(response: 200, description: 'User profile'),
+            new OA\Response(response: 401, description: 'Unauthorized'),
+        ]
+    )]
     public function me(): JsonResponse
     {
         /** @var User $user */

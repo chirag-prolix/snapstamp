@@ -7,6 +7,7 @@ use App\Entity\Merchant;
 use App\Enum\MerchantStatusEnum;
 use App\Repository\MerchantRepository;
 use App\Service\MerchantOnboardingService;
+use OpenApi\Attributes as OA;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,6 +16,7 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 #[Route('/api/v1/admin')]
+#[OA\Tag(name: 'Admin')]
 class AdminController extends AbstractController
 {
     public function __construct(
@@ -24,6 +26,25 @@ class AdminController extends AbstractController
     ) {}
 
     #[Route('/merchants', methods: ['GET'])]
+    #[OA\Get(
+        path: '/api/v1/admin/merchants',
+        summary: 'List all merchants, optionally filtered by onboarding status',
+        parameters: [
+            new OA\Parameter(
+                name: 'status',
+                in: 'query',
+                required: false,
+                schema: new OA\Schema(type: 'string', enum: ['PENDING', 'ACTIVE', 'REJECTED']),
+                example: 'PENDING'
+            ),
+        ],
+        responses: [
+            new OA\Response(response: 200, description: 'List of merchants'),
+            new OA\Response(response: 400, description: 'Invalid status value'),
+            new OA\Response(response: 401, description: 'Unauthorized'),
+            new OA\Response(response: 403, description: 'Forbidden — admin role required'),
+        ]
+    )]
     public function listMerchants(Request $request): JsonResponse
     {
         $statusParam = $request->query->get('status');
@@ -47,6 +68,19 @@ class AdminController extends AbstractController
     }
 
     #[Route('/merchants/{id}', methods: ['GET'])]
+    #[OA\Get(
+        path: '/api/v1/admin/merchants/{id}',
+        summary: 'Get a single merchant by ID',
+        parameters: [
+            new OA\Parameter(name: 'id', in: 'path', required: true, schema: new OA\Schema(type: 'string', format: 'uuid')),
+        ],
+        responses: [
+            new OA\Response(response: 200, description: 'Merchant details'),
+            new OA\Response(response: 401, description: 'Unauthorized'),
+            new OA\Response(response: 403, description: 'Forbidden — admin role required'),
+            new OA\Response(response: 404, description: 'Merchant not found'),
+        ]
+    )]
     public function getMerchant(string $id): JsonResponse
     {
         $merchant = $this->merchantRepository->find($id);
@@ -65,6 +99,20 @@ class AdminController extends AbstractController
     }
 
     #[Route('/merchants/{id}/approve', methods: ['POST'])]
+    #[OA\Post(
+        path: '/api/v1/admin/merchants/{id}/approve',
+        summary: 'Approve a pending merchant application',
+        parameters: [
+            new OA\Parameter(name: 'id', in: 'path', required: true, schema: new OA\Schema(type: 'string', format: 'uuid')),
+        ],
+        responses: [
+            new OA\Response(response: 200, description: 'Merchant approved'),
+            new OA\Response(response: 400, description: 'Merchant is not in PENDING status'),
+            new OA\Response(response: 401, description: 'Unauthorized'),
+            new OA\Response(response: 403, description: 'Forbidden — admin role required'),
+            new OA\Response(response: 404, description: 'Merchant not found'),
+        ]
+    )]
     public function approveMerchant(string $id): JsonResponse
     {
         $merchant = $this->merchantRepository->find($id);
@@ -93,6 +141,29 @@ class AdminController extends AbstractController
     }
 
     #[Route('/merchants/{id}/reject', methods: ['POST'])]
+    #[OA\Post(
+        path: '/api/v1/admin/merchants/{id}/reject',
+        summary: 'Reject a pending merchant application',
+        parameters: [
+            new OA\Parameter(name: 'id', in: 'path', required: true, schema: new OA\Schema(type: 'string', format: 'uuid')),
+        ],
+        requestBody: new OA\RequestBody(
+            required: true,
+            content: new OA\JsonContent(
+                required: ['reason'],
+                properties: [
+                    new OA\Property(property: 'reason', type: 'string', example: 'Documents are incomplete.'),
+                ]
+            )
+        ),
+        responses: [
+            new OA\Response(response: 200, description: 'Merchant rejected'),
+            new OA\Response(response: 400, description: 'Validation error or merchant not in PENDING status'),
+            new OA\Response(response: 401, description: 'Unauthorized'),
+            new OA\Response(response: 403, description: 'Forbidden — admin role required'),
+            new OA\Response(response: 404, description: 'Merchant not found'),
+        ]
+    )]
     public function rejectMerchant(string $id, Request $request): JsonResponse
     {
         $merchant = $this->merchantRepository->find($id);
