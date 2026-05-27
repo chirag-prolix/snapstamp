@@ -176,6 +176,8 @@ class AuthController extends AbstractController
 
         try {
             $this->authService->requestPhoneLoginOtp($dto->phone);
+        } catch (\DomainException $e) {
+            return $this->fail($e->getMessage(), Response::HTTP_UNPROCESSABLE_ENTITY);
         } catch (\Symfony\Component\Security\Core\Exception\AuthenticationException $e) {
             return $this->fail($e->getMessage(), Response::HTTP_UNAUTHORIZED);
         }

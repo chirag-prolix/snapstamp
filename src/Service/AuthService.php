@@ -153,9 +153,8 @@ class AuthService
     {
         $user = $this->userRepository->findOneByPhone($phone);
 
-        // Silent return when phone not found to prevent user enumeration
         if ($user === null || $user->isDeleted()) {
-            return;
+            throw new \DomainException('This phone number is not registered.');
         }
 
         if ($user->getStatus() === UserStatusEnum::PENDING) {
