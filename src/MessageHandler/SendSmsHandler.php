@@ -15,6 +15,7 @@ class SendSmsHandler
         private readonly string $twilioSid,
         private readonly string $twilioToken,
         private readonly string $twilioFrom,
+        private readonly string $testPhoneOverride = '',
     ) {}
 
     public function __invoke(SendSmsMessage $message): void
@@ -27,9 +28,15 @@ class SendSmsHandler
             return;
         }
 
+        $to = $this->testPhoneOverride !== '' ? $this->testPhoneOverride : $message->to;
+
+        if ($this->testPhoneOverride !== '') {
+            $this->logger->info('SMS redirected to test number', ['original' => $message->to, 'redirected_to' => $to]);
+        }
+
         try {
             $client = new TwilioClient($this->twilioSid, $this->twilioToken);
-            $client->messages->create($message->to, [
+            $client->messages->create($to, [
                 'from' => $this->twilioFrom,
                 'body' => $message->body,
             ]);

@@ -41,9 +41,10 @@ services:
 
     App\MessageHandler\SendSmsHandler:
         arguments:
-            $twilioSid:   '%env(TWILIO_ACCOUNT_SID)%'
-            $twilioToken: '%env(TWILIO_AUTH_TOKEN)%'
-            $twilioFrom:  '%env(TWILIO_PHONE_NUMBER)%'
+            $twilioSid:          '%env(TWILIO_ACCOUNT_SID)%'
+            $twilioToken:        '%env(TWILIO_AUTH_TOKEN)%'
+            $twilioFrom:         '%env(TWILIO_PHONE_NUMBER)%'
+            $testPhoneOverride:  '%env(default::TEST_PHONE_OVERRIDE)%'
 
     Google\Client:
         arguments:

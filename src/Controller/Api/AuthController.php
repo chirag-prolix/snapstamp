@@ -4,6 +4,7 @@ namespace App\Controller\Api;
 
 use App\Dto\Auth\GoogleLoginDto;
 use App\Dto\Auth\LoginDto;
+use App\Dto\Auth\SetPhoneDto;
 use App\Dto\Auth\LoginPhoneRequestDto;
 use App\Dto\Auth\LoginPhoneVerifyDto;
 use App\Dto\Auth\RefreshTokenDto;
@@ -122,6 +123,28 @@ class AuthController extends AbstractController
         }
 
         return $this->json($result, Response::HTTP_CREATED);
+    }
+
+    #[Route('/phone', methods: ['POST'])]
+    #[IsGranted('ROLE_USER')]
+    public function setPhone(Request $request): JsonResponse
+    {
+        $dto = $this->hydrate(new SetPhoneDto(), $request);
+
+        if ($error = $this->validate($dto)) {
+            return $error;
+        }
+
+        /** @var User $user */
+        $user = $this->getUser();
+
+        try {
+            $this->authService->setPhoneAndSendOtp($user, $dto->phone);
+        } catch (\DomainException $e) {
+            return $this->fail($e->getMessage(), Response::HTTP_CONFLICT);
+        }
+
+        return $this->json(['success' => true, 'message' => 'OTP sent to your phone number.']);
     }
 
     #[Route('/google', methods: ['POST'])]

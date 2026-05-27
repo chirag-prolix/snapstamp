@@ -134,6 +134,21 @@ class AuthService
         return $this->buildTokenResponse($user, 200);
     }
 
+    public function setPhoneAndSendOtp(User $user, string $phone): void
+    {
+        $existing = $this->userRepository->findOneByPhone($phone);
+        if ($existing !== null && $existing->getId() !== $user->getId()) {
+            throw new \DomainException('Phone number is already registered to another account.');
+        }
+
+        if ($user->getPhone() !== $phone) {
+            $user->setPhone($phone);
+            $this->em->flush();
+        }
+
+        $this->otpService->requestPhoneOtp($user);
+    }
+
     public function requestPhoneLoginOtp(string $phone): void
     {
         $user = $this->userRepository->findOneByPhone($phone);
