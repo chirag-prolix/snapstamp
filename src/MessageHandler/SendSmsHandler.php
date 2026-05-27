@@ -40,7 +40,7 @@ class SendSmsHandler
                 'from' => $this->twilioFrom,
                 'body' => $message->body,
             ]);
-            $this->logger->info('SMS sent', ['to' => $message->to]);
+            $this->logger->info('SMS sent', ['to' => $to]);
         } catch (\Exception $e) {
             $this->logger->error('Failed to send SMS', [
                 'to'    => $message->to,
