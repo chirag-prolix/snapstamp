@@ -44,3 +44,9 @@ services:
             $twilioSid:   '%env(TWILIO_ACCOUNT_SID)%'
             $twilioToken: '%env(TWILIO_AUTH_TOKEN)%'
             $twilioFrom:  '%env(TWILIO_PHONE_NUMBER)%'
+
+    Google\Client:
+        arguments:
+            $config: []
+        calls:
+            - setClientId: ['%env(GOOGLE_CLIENT_ID)%']

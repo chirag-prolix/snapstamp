@@ -25,10 +25,12 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Assert\Email]
     private string $email;
 
-    #[ORM\Column(type: 'string', length: 20, unique: true)]
-    #[Assert\NotBlank]
+    #[ORM\Column(type: 'string', length: 20, unique: true, nullable: true)]
     #[Assert\Regex(pattern: '/^\+?[1-9]\d{1,14}$/', message: 'Invalid phone number format')]
-    private string $phone;
+    private ?string $phone = null;
+
+    #[ORM\Column(type: 'string', length: 100, unique: true, nullable: true)]
+    private ?string $googleId = null;
 
     #[ORM\Column(type: 'string')]
     private string $password;
@@ -86,15 +88,26 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getPhone(): string
+    public function getPhone(): ?string
     {
         return $this->phone;
     }
 
-    public function setPhone(string $phone): self
+    public function setPhone(?string $phone): self
     {
         $this->phone = $phone;
         $this->updatedAt = new \DateTimeImmutable();
+        return $this;
+    }
+
+    public function getGoogleId(): ?string
+    {
+        return $this->googleId;
+    }
+
+    public function setGoogleId(?string $googleId): self
+    {
+        $this->googleId = $googleId;
         return $this;
     }
 

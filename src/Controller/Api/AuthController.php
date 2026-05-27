@@ -2,6 +2,7 @@
 
 namespace App\Controller\Api;
 
+use App\Dto\Auth\GoogleLoginDto;
 use App\Dto\Auth\LoginDto;
 use App\Dto\Auth\LoginPhoneRequestDto;
 use App\Dto\Auth\LoginPhoneVerifyDto;
@@ -10,6 +11,7 @@ use App\Dto\Auth\RegisterCustomerDto;
 use App\Dto\Auth\RegisterMerchantDto;
 use App\Entity\User;
 use App\Service\AuthService;
+use App\Service\SocialAuthService;
 use OpenApi\Attributes as OA;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -25,6 +27,7 @@ class AuthController extends AbstractController
 {
     public function __construct(
         private readonly AuthService $authService,
+        private readonly SocialAuthService $socialAuthService,
         private readonly ValidatorInterface $validator,
     ) {}
 
@@ -119,6 +122,24 @@ class AuthController extends AbstractController
         }
 
         return $this->json($result, Response::HTTP_CREATED);
+    }
+
+    #[Route('/google', methods: ['POST'])]
+    public function googleLogin(Request $request): JsonResponse
+    {
+        $dto = $this->hydrate(new GoogleLoginDto(), $request);
+
+        if ($error = $this->validate($dto)) {
+            return $error;
+        }
+
+        try {
+            $result = $this->socialAuthService->loginWithGoogle($dto->idToken);
+        } catch (\DomainException $e) {
+            return $this->fail($e->getMessage(), Response::HTTP_UNAUTHORIZED);
+        }
+
+        return $this->tokens($result);
     }
 
     #[Route('/login/phone', methods: ['POST'])]
