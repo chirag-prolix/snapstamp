@@ -23,7 +23,7 @@ class OtpToken
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private User $user;
 
-    #[ORM\Column(type: 'string', length: 10)]
+    #[ORM\Column(type: 'string', length: 20)]
     private string $type;
 
     #[ORM\Column(type: 'string', length: 64)]

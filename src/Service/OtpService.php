@@ -185,5 +185,7 @@ class OtpService
             $user->getPhone(),
             "Your snapstamp code: {$code}. Valid for " . ($this->otpTtl / 60) . " minutes."
         ));
+
+        $this->logger->info('[DEV] SMS OTP code', ['to' => $user->getPhone(), 'code' => $code]);
     }
 }
