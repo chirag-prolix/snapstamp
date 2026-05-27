@@ -3,6 +3,8 @@
 namespace App\Controller\Api;
 
 use App\Dto\Auth\LoginDto;
+use App\Dto\Auth\LoginPhoneRequestDto;
+use App\Dto\Auth\LoginPhoneVerifyDto;
 use App\Dto\Auth\RefreshTokenDto;
 use App\Dto\Auth\RegisterCustomerDto;
 use App\Dto\Auth\RegisterMerchantDto;
@@ -117,6 +119,44 @@ class AuthController extends AbstractController
         }
 
         return $this->json($result, Response::HTTP_CREATED);
+    }
+
+    #[Route('/login/phone', methods: ['POST'])]
+    public function loginPhoneRequest(Request $request): JsonResponse
+    {
+        $dto = $this->hydrate(new LoginPhoneRequestDto(), $request);
+
+        if ($error = $this->validate($dto)) {
+            return $error;
+        }
+
+        try {
+            $this->authService->requestPhoneLoginOtp($dto->phone);
+        } catch (\Symfony\Component\Security\Core\Exception\AuthenticationException $e) {
+            return $this->fail($e->getMessage(), Response::HTTP_UNAUTHORIZED);
+        }
+
+        return $this->json(['success' => true, 'message' => 'OTP sent to your phone number.']);
+    }
+
+    #[Route('/login/phone/verify', methods: ['POST'])]
+    public function loginPhoneVerify(Request $request): JsonResponse
+    {
+        $dto = $this->hydrate(new LoginPhoneVerifyDto(), $request);
+
+        if ($error = $this->validate($dto)) {
+            return $error;
+        }
+
+        try {
+            $result = $this->authService->loginWithPhoneOtp($dto->phone, $dto->code);
+        } catch (\DomainException $e) {
+            return $this->fail($e->getMessage(), Response::HTTP_BAD_REQUEST);
+        } catch (\Symfony\Component\Security\Core\Exception\AuthenticationException $e) {
+            return $this->fail($e->getMessage(), Response::HTTP_UNAUTHORIZED);
+        }
+
+        return $this->tokens($result);
     }
 
     #[Route('/login', methods: ['POST'])]

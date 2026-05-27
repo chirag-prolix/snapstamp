@@ -11,6 +11,7 @@ use App\Entity\User;
 use App\Enum\UserStatusEnum;
 use App\Repository\CustomerRepository;
 use App\Repository\UserRepository;
+use App\Service\OtpService;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
@@ -28,6 +29,7 @@ class AuthService
         private readonly LoggerInterface $logger,
         private readonly ReferralService $referralService,
         private readonly CustomerRepository $customerRepository,
+        private readonly OtpService $otpService,
     ) {}
 
     public function registerCustomer(RegisterCustomerDto $dto): array
@@ -128,6 +130,56 @@ class AuthService
         $this->em->flush();
 
         $this->logger->info('User logged in', ['id' => $user->getId()]);
+
+        return $this->buildTokenResponse($user, 200);
+    }
+
+    public function requestPhoneLoginOtp(string $phone): void
+    {
+        $user = $this->userRepository->findOneByPhone($phone);
+
+        // Silent return when phone not found to prevent user enumeration
+        if ($user === null || $user->isDeleted()) {
+            return;
+        }
+
+        if ($user->getStatus() === UserStatusEnum::PENDING) {
+            throw new AuthenticationException('Account is pending approval.');
+        }
+
+        if ($user->getStatus() !== UserStatusEnum::ACTIVE) {
+            throw new AuthenticationException('Account is not active.');
+        }
+
+        $this->otpService->requestPhoneLoginOtp($user);
+    }
+
+    public function loginWithPhoneOtp(string $phone, string $code): array
+    {
+        $user = $this->userRepository->findOneByPhone($phone);
+
+        if ($user === null || $user->isDeleted()) {
+            throw new \DomainException('Invalid OTP code.');
+        }
+
+        if ($user->getStatus() === UserStatusEnum::PENDING) {
+            throw new AuthenticationException('Account is pending approval.');
+        }
+
+        if ($user->getStatus() !== UserStatusEnum::ACTIVE) {
+            throw new AuthenticationException('Account is not active.');
+        }
+
+        $this->otpService->verifyPhoneLoginOtp($user, $code);
+
+        if ($user instanceof Customer) {
+            $user->touchLastActive();
+        } elseif ($user instanceof Merchant) {
+            $user->touchApiAccess();
+        }
+
+        $this->em->flush();
+        $this->logger->info('User logged in via phone OTP', ['id' => $user->getId()]);
 
         return $this->buildTokenResponse($user, 200);
     }

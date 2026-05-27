@@ -64,6 +64,51 @@ class OtpService
         $this->logger->info('Phone OTP sent', ['user' => $user->getId()]);
     }
 
+    public function requestPhoneLoginOtp(User $user): void
+    {
+        $this->checkCooldown($user, 'phone_login');
+        $this->otpTokenRepository->invalidateAllForUser($user, 'phone_login');
+
+        $code  = $this->generateCode();
+        $token = new OtpToken(
+            $user,
+            'phone_login',
+            $this->hashCode($code),
+            (new \DateTimeImmutable())->modify("+{$this->otpTtl} seconds")
+        );
+
+        $this->em->persist($token);
+        $this->em->flush();
+
+        $this->sendSmsOtp($user, $code);
+        $this->logger->info('Phone login OTP sent', ['user' => $user->getId()]);
+    }
+
+    public function verifyPhoneLoginOtp(User $user, string $plainCode): void
+    {
+        $token = $this->otpTokenRepository->findValidForUser($user, 'phone_login');
+
+        if ($token === null) {
+            throw new \DomainException('No active OTP found. Please request a new one.');
+        }
+
+        $attempts = $token->incrementAttempts();
+        $this->em->flush();
+
+        if ($attempts > $this->maxAttempts) {
+            throw new \DomainException('Too many attempts. Please request a new OTP.');
+        }
+
+        if (!hash_equals($token->getCodeHash(), $this->hashCode($plainCode))) {
+            throw new \DomainException('Invalid OTP code.');
+        }
+
+        $token->markUsed();
+        $this->em->flush();
+
+        $this->logger->info('Phone login OTP verified', ['user' => $user->getId()]);
+    }
+
     public function verifyOtp(User $user, string $type, string $plainCode): void
     {
         $token = $this->otpTokenRepository->findValidForUser($user, $type);
