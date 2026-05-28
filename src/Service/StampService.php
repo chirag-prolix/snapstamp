@@ -36,7 +36,7 @@ class StampService
     {
         $customer = $this->resolveCustomer($dto);
 
-        $stampCard = $this->getOrCreateStampCard($customer, $merchant);
+        $stampCard = $this->getOrCreateStampCard($customer, $merchant, $dto);
 
         if ($stampCard->getStatus() === StampCardStatusEnum::COMPLETED) {
             throw new \DomainException('Stamp card is already completed.');
@@ -181,22 +181,30 @@ class StampService
         return $user;
     }
 
-    private function getOrCreateStampCard(Customer $customer, Merchant $merchant): StampCard
+    private function getOrCreateStampCard(Customer $customer, Merchant $merchant, IssueStampDto $dto): StampCard
     {
         $card = $this->stampCardRepository->findActiveByCustomerAndMerchant($customer, $merchant);
 
-        if ($card !== null) {
-            return $card;
+        if ($card === null) {
+            $card = new StampCard();
+            $card->setCustomer($customer)
+                ->setMerchant($merchant)
+                ->setCardNumber('SC-' . strtoupper(bin2hex(random_bytes(6))))
+                ->setTotalSlotsRequired(10)
+                ->setDisplayName($merchant->getBusinessName() . ' Card');
+            $this->em->persist($card);
         }
 
-        $card = new StampCard();
-        $card->setCustomer($customer)
-            ->setMerchant($merchant)
-            ->setCardNumber('SC-' . strtoupper(bin2hex(random_bytes(6))))
-            ->setTotalSlotsRequired(10)
-            ->setDisplayName($merchant->getBusinessName() . ' Card');
-
-        $this->em->persist($card);
+        if ($dto->cardExpiresAt !== null) {
+            $expiresAt = \DateTimeImmutable::createFromFormat('Y-m-d', $dto->cardExpiresAt);
+            if ($expiresAt === false) {
+                throw new \DomainException('Invalid cardExpiresAt format. Use YYYY-MM-DD.');
+            }
+            if ($expiresAt < new \DateTimeImmutable('today')) {
+                throw new \DomainException('Card expiry date must be in the future.');
+            }
+            $card->setExpiresAt($expiresAt->setTime(23, 59, 59));
+        }
 
         return $card;
     }

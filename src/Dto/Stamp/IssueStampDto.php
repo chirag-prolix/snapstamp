@@ -23,4 +23,7 @@ class IssueStampDto
     public ?string $notes = null;
 
     public bool $isBonus = false;
+
+    #[Assert\Date(message: 'cardExpiresAt must be a valid date (YYYY-MM-DD)')]
+    public ?string $cardExpiresAt = null;
 }
