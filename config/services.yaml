@@ -48,8 +48,8 @@ services:
 
     App\Service\ClaudeAiService:
         arguments:
-            $apiKey: '%env(ANTHROPIC_API_KEY)%'
-            $model: '%env(ANTHROPIC_MODEL)%'
+            $apiKey: '%env(OPENROUTER_API_KEY)%'
+            $model: '%env(OPENROUTER_MODEL)%'
 
     Google\Client:
         arguments:
