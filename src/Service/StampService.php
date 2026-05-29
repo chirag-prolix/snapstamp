@@ -34,6 +34,10 @@ class StampService
 
     public function issueStamps(Merchant $merchant, IssueStampDto $dto): array
     {
+        if (!$merchant->hasActiveAccess()) {
+            throw new \DomainException('Trial expired. Please subscribe to continue issuing stamps.');
+        }
+
         $customer = $this->resolveCustomer($dto);
 
         $stampCard = $this->getOrCreateStampCard($customer, $merchant, $dto);

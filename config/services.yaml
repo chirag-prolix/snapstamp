@@ -46,6 +46,11 @@ services:
             $twilioFrom:         '%env(TWILIO_PHONE_NUMBER)%'
             $testPhoneOverride:  '%env(default::TEST_PHONE_OVERRIDE)%'
 
+    App\Service\ClaudeAiService:
+        arguments:
+            $apiKey: '%env(ANTHROPIC_API_KEY)%'
+            $model: '%env(ANTHROPIC_MODEL)%'
+
     Google\Client:
         arguments:
             $config: []
