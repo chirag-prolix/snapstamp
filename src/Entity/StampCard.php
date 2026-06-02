@@ -166,6 +166,14 @@ class StampCard
         return $this;
     }
 
+    public function resetAfterRedemption(): self
+    {
+        $this->currentStampCount = 0;
+        $this->status = StampCardStatusEnum::ACTIVE;
+        $this->completedAt = null;
+        return $this;
+    }
+
     public function getCreatedAt(): \DateTimeImmutable
     {
         return $this->createdAt;

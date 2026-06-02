@@ -128,6 +128,8 @@ class MerchantOnboardingService
             'isVerified'            => $merchant->isVerified(),
             'verificationDocuments' => $merchant->getVerificationDocuments(),
             'apiKey'                => $merchant->getApiKey(),
+            'latitude'              => $merchant->getLatitude(),
+            'longitude'             => $merchant->getLongitude(),
             'isEmailVerified'       => $merchant->isEmailVerified(),
             'isPhoneVerified'       => $merchant->isPhoneVerified(),
             'createdAt'             => $merchant->getCreatedAt()->format(\DateTimeInterface::ATOM),

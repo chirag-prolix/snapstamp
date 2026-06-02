@@ -181,6 +181,7 @@ class RewardService
         $reward   = $redemption->getReward();
 
         $redemption->approve($merchant);
+        $redemption->getStampCard()?->resetAfterRedemption();
         $reward->incrementCurrentRedemptions();
         $customer->incrementTotalRewardsRedeemed();
 
