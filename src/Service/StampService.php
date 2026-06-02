@@ -40,6 +40,10 @@ class StampService
 
         $customer = $this->resolveCustomer($dto);
 
+        if ($dto->transactionId !== null && $this->stampRepository->existsByTransactionId($dto->transactionId)) {
+            throw new \DomainException('Stamps have already been issued for this transaction.');
+        }
+
         $stampCard = $this->getOrCreateStampCard($customer, $merchant, $dto);
 
         if ($stampCard->getStatus() === StampCardStatusEnum::COMPLETED) {
@@ -48,6 +52,15 @@ class StampService
 
         if ($stampCard->getStatus() !== StampCardStatusEnum::ACTIVE || $stampCard->isExpired()) {
             throw new \DomainException('Stamp card is not active or has expired.');
+        }
+
+        $remainingSlots = $stampCard->getTotalSlotsRequired() - $stampCard->getCurrentStampCount();
+        if ($dto->count > $remainingSlots) {
+            throw new \DomainException(sprintf(
+                'Cannot issue %d stamp(s). This card only has %d slot(s) remaining.',
+                $dto->count,
+                $remainingSlots
+            ));
         }
 
         $nextSeq = $this->stampRepository->getNextSequenceForCard($stampCard);
@@ -105,7 +118,7 @@ class StampService
             throw new \DomainException('No active stamp card found for this customer.');
         }
 
-        $stamps = $this->stampRepository->findByStampCard($card);
+        $stamps = $this->activeStampsForCard($card);
 
         return [
             'stampCard' => $this->serializeStampCard($card),
@@ -130,7 +143,7 @@ class StampService
             throw new \DomainException('Stamp card not found.');
         }
 
-        $stamps = $this->stampRepository->findByStampCard($card);
+        $stamps = $this->activeStampsForCard($card);
 
         return [
             'stampCard' => $this->serializeStampCard($card),
@@ -166,6 +179,13 @@ class StampService
             'collectedAt'   => $stamp->getCollectedAt()->format(\DateTimeInterface::ATOM),
             'expiresAt'     => $stamp->getExpiresAt()->format(\DateTimeInterface::ATOM),
         ];
+    }
+
+    private function activeStampsForCard(StampCard $card): array
+    {
+        $all   = $this->stampRepository->findByStampCard($card);
+        $count = $card->getCurrentStampCount();
+        return $count > 0 ? array_slice($all, -$count) : [];
     }
 
     private function resolveCustomer(IssueStampDto $dto): Customer

@@ -353,6 +353,9 @@ class AuthController extends AbstractController
         );
     }
 
+    /**
+     * @param array{accessToken: string, refreshToken: string, user: array<string, mixed>} $result
+     */
     private function tokens(array $result, int $status = Response::HTTP_OK): JsonResponse
     {
         return $this->json([

@@ -299,12 +299,11 @@ class Customer extends User
 
     public function getTier(): string
     {
-        $spent = (float) $this->totalSpent;
         return match(true) {
-            $spent >= 50000 => 'PLATINUM',
-            $spent >= 20000 => 'GOLD',
-            $spent >= 5000  => 'SILVER',
-            default         => 'BRONZE',
+            $this->totalStampsCollected >= 100 => 'PLATINUM',
+            $this->totalStampsCollected >= 50  => 'GOLD',
+            $this->totalStampsCollected >= 10  => 'SILVER',
+            default                            => 'BRONZE',
         };
     }
 }

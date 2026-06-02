@@ -19,7 +19,9 @@ class StampRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('s')
             ->where('s.stampCard = :stampCard')
+            ->andWhere('s.status = :status')
             ->setParameter('stampCard', $stampCard)
+            ->setParameter('status', StampStatusEnum::ACTIVE)
             ->orderBy('s.stampSequence', 'ASC')
             ->getQuery()
             ->getResult();
@@ -34,6 +36,17 @@ class StampRepository extends ServiceEntityRepository
             ->setParameter('status', StampStatusEnum::ACTIVE)
             ->getQuery()
             ->getResult();
+    }
+
+    public function existsByTransactionId(string $transactionId): bool
+    {
+        return $this->createQueryBuilder('s')
+            ->select('1')
+            ->where('s.transactionId = :tid')
+            ->setParameter('tid', $transactionId)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult() !== null;
     }
 
     public function getNextSequenceForCard(StampCard $stampCard): int

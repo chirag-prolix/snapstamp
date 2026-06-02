@@ -11,6 +11,8 @@ use App\Entity\RewardRedemption;
 use App\Entity\Transaction;
 use App\Enum\NotificationTypeEnum;
 use App\Enum\RewardStatusEnum;
+use App\Enum\StampCardStatusEnum;
+use App\Enum\StampStatusEnum;
 use App\Enum\RewardTypeEnum;
 use App\Enum\RewardRedemptionStatusEnum;
 use App\Enum\TransactionStatusEnum;
@@ -19,6 +21,7 @@ use App\Message\SendPushNotificationMessage;
 use App\Repository\RewardRedemptionRepository;
 use App\Repository\RewardRepository;
 use App\Repository\StampCardRepository;
+use App\Repository\StampRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
@@ -30,6 +33,7 @@ class RewardService
         private readonly RewardRepository $rewardRepository,
         private readonly RewardRedemptionRepository $redemptionRepository,
         private readonly StampCardRepository $stampCardRepository,
+        private readonly StampRepository $stampRepository,
         private readonly LoggerInterface $logger,
         private readonly MessageBusInterface $bus,
     ) {}
@@ -98,6 +102,9 @@ class RewardService
         }
         $map = [];
         foreach ($this->stampCardRepository->findByCustomer($customer) as $card) {
+            if (!in_array($card->getStatus(), [StampCardStatusEnum::ACTIVE, StampCardStatusEnum::COMPLETED], true)) {
+                continue;
+            }
             $mid = $card->getMerchant()->getId();
             $count = $card->getCurrentStampCount();
             if (!isset($map[$mid]) || $count > $map[$mid]) {
@@ -138,6 +145,10 @@ class RewardService
         $stampCard = $this->stampCardRepository->findCompletedByCustomerAndMerchant($customer, $reward->getMerchant());
         if ($stampCard === null) {
             throw new \DomainException('No completed stamp card found for this reward.');
+        }
+
+        if ($stampCard->isExpired()) {
+            throw new \DomainException('Your stamp card has expired and cannot be redeemed.');
         }
 
         if ($this->redemptionRepository->findPendingByStampCard($stampCard) !== null) {
@@ -181,6 +192,14 @@ class RewardService
         $reward   = $redemption->getReward();
 
         $redemption->approve($merchant);
+
+        $stampCard = $redemption->getStampCard();
+        if ($stampCard !== null) {
+            foreach ($this->stampRepository->findByStampCard($stampCard) as $stamp) {
+                $stamp->setStatus(StampStatusEnum::REDEEMED);
+            }
+            $stampCard->resetAfterRedemption();
+        }
         $reward->incrementCurrentRedemptions();
         $customer->incrementTotalRewardsRedeemed();
 

@@ -137,7 +137,7 @@ symfony serve
 | Entity | Notes |
 |---|---|
 | `User` | Abstract, SINGLE_TABLE inheritance, soft delete via `deletedAt` |
-| `Customer` | Extends User · tier computed from `totalSpent` (BRONZE/SILVER/GOLD/PLATINUM) |
+| `Customer` | Extends User · tier computed from `totalStampsCollected` (BRONZE/SILVER/GOLD/PLATINUM) |
 | `Merchant` | Extends User · API key/secret · onboarding status |
 | `MerchantCategory` | Lookup table with auto-generated slug |
 | `StampCard` | Auto-completes when `currentStampCount >= totalSlotsRequired` |
@@ -281,6 +281,8 @@ curl -s -X PATCH http://localhost:8000/api/v1/merchant/profile \
 - Stamp card auto-created on first visit (`SC-{hex}` card number, 10 slots by default)
 - Identify customer by `customerId` (UUID) or `customerPhone` (E.164)
 - Issue 1–10 stamps per request; stamp sequences increment correctly across calls
+- Cannot issue more stamps than remaining slots on the card — request is rejected with a clear error (e.g. _"Card only has 1 slot(s) remaining"_)
+- Optional `transactionId` field acts as an idempotency key — re-submitting the same `transactionId` returns a 400 instead of double-issuing
 - Card auto-completes (`status: COMPLETED`) when `currentStampCount >= totalSlotsRequired`
 - After a card completes, the next stamp issuance automatically starts a new card
 - Every issuance writes a `STAMP_ISSUED` transaction record and a `STAMP_RECEIVED` notification
@@ -338,6 +340,7 @@ All blocking I/O (email, SMS, push) is now dispatched to an async queue instead 
 | `StampService` | Stamp issued | `SendPushNotificationMessage` |
 | `RewardService` | Redemption initiated | `SendPushNotificationMessage` |
 | `RewardService` | Redemption approved | `SendPushNotificationMessage` |
+| `ReferralService` | Referral processed | `SendPushNotificationMessage` |
 
 **Key details:**
 - Failed messages land in the `failed` Doctrine transport for manual retry
@@ -455,20 +458,26 @@ Every customer receives a unique 8-character referral code (e.g. `ALIC4F9B`) at 
 **Referral flow:**
 1. Customer A registers → code `ALIC4F9B` auto-generated and stored
 2. Customer B registers with `"referralCode": "ALIC4F9B"` in the request body
-3. A's `referralCount` increments, a `REFERRAL_BONUS` transaction is created (merchant-free), a `SYSTEM` notification is persisted, and a push notification is dispatched async
+3. On success:
+   - A's `referralCount` increments
+   - A is credited **+5 bonus stamps** to their `totalStampsCollected` (counts toward tier progression)
+   - A `REFERRAL_BONUS` transaction is recorded with `stamps: 5`
+   - A `SYSTEM` in-app notification is persisted and a push notification dispatched: _"Bob joined using your referral code. You've earned 5 bonus stamps!"_
 4. Invalid or unknown codes are silently ignored — registration always succeeds
 
 **Endpoint:**
 
 | Method | Path | Auth | Description |
 |---|---|---|---|
-| `GET` | `/api/v1/customer/referral` | `ROLE_CUSTOMER` | Own referral code, count, and referral list |
+| `GET` | `/api/v1/customer/referral` | `ROLE_CUSTOMER` | Own referral code, count, bonus info, and referral list |
 
 **Response shape:**
 ```json
 {
   "referralCode": "ALIC4F9B",
   "referralCount": 2,
+  "bonusStampsPerReferral": 5,
+  "totalBonusStamps": 10,
   "referrals": [
     { "id": "...", "firstName": "Bob", "lastName": "Smith", "joinedAt": "2026-05-18T11:25:54+00:00" }
   ]
@@ -487,6 +496,7 @@ CODE=$(echo $NEW | python3 -c "import sys,json; print(json.load(sys.stdin)['data
 curl -s -X POST http://localhost:8000/api/v1/auth/register/customer \
   -H "Content-Type: application/json" \
   -d "{\"email\":\"bob@example.com\",\"password\":\"secret123\",\"firstName\":\"Bob\",\"lastName\":\"B\",\"phone\":\"+919900000002\",\"referralCode\":\"$CODE\"}"
+# Alice now has +5 bonus stamps and her referralCount = 1
 
 # Check Alice's referral stats
 TOKEN=$(curl -s -X POST http://localhost:8000/api/v1/auth/login \
@@ -494,18 +504,14 @@ TOKEN=$(curl -s -X POST http://localhost:8000/api/v1/auth/login \
   -d '{"email":"alice@example.com","password":"secret123"}' \
   | python3 -c "import sys,json; print(json.load(sys.stdin)['data']['accessToken'])")
 curl http://localhost:8000/api/v1/customer/referral -H "Authorization: Bearer $TOKEN"
+# Expect: referralCount=1, totalBonusStamps=5
 ```
 
-**New files:**
+**Key files:**
 - `src/Service/ReferralService.php` — `generateUniqueCode()`, `processReferral()`, `getReferralStats()`
 - `src/Controller/Api/CustomerReferralController.php` — `GET /api/v1/customer/referral`
-
-**Modified files:**
-- `src/Entity/Customer.php` — added `referredBy` self-referencing nullable ManyToOne + getter/setter
-- `src/Enum/TransactionTypeEnum.php` — added `REFERRAL_BONUS`
-- `src/Dto/Auth/RegisterCustomerDto.php` — added optional `?string $referralCode`
-- `src/Repository/CustomerRepository.php` — added `findByReferrer()`
-- `src/Service/AuthService.php` — generates code on register, processes incoming referral code (soft-fail)
+- `src/Entity/Customer.php` — `referredBy` self-referencing FK, `referralCount`, `referralCode`
+- `src/Enum/TransactionTypeEnum.php` — `REFERRAL_BONUS`
 
 **Migration:** `referred_by_id` nullable FK on `users` table (self-reference).
 
@@ -673,6 +679,32 @@ curl -s -X POST http://localhost:8000/api/v1/verification/verify \
   -d '{"type":"email","code":"123456"}'
 # Expect: {"success":true,"data":{"isEmailVerified":true,"isPhoneVerified":false}}
 ```
+
+---
+
+### ✅ Customer Loyalty Tier
+
+Customers are automatically assigned a tier based on their **total lifetime stamps collected** (`Customer.totalStampsCollected`). The tier is computed on-the-fly in `Customer::getTier()` — no separate DB column needed.
+
+**Tier thresholds:**
+
+| Tier | Stamps required | How to reach it |
+|---|---|---|
+| BRONZE | 0 – 9 | Default for new customers |
+| SILVER | 10 – 49 | Complete ~1 stamp card |
+| GOLD | 50 – 99 | Complete ~5 stamp cards |
+| PLATINUM | 100+ | Complete ~10 stamp cards |
+
+**What counts toward stamps:**
+- Every stamp issued by a merchant via `POST /api/v1/stamps/issue` increments `totalStampsCollected`
+- Every successful referral awards the referrer **+5 bonus stamps**, also counted toward their tier
+
+**Where tier is used:**
+- Returned in the customer profile (`GET /api/v1/auth/me` and `GET /api/v1/customer/profile`)
+- Passed to the Claude AI reward recommendation engine — higher-tier customers receive more personalised, premium suggestions
+- Displayed on the customer dashboard and top bar in the frontend
+
+**Example:** A customer who has collected 52 lifetime stamps (including 10 bonus stamps from 2 referrals) is **GOLD** tier and will receive AI-curated premium reward recommendations.
 
 ---
 
