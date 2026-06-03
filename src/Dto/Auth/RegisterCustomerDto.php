@@ -23,7 +23,7 @@ class RegisterCustomerDto
     public string $lastName = '';
 
     #[Assert\NotBlank(message: 'Phone is required')]
-    #[Assert\Regex(pattern: '/^\+?[1-9]\d{1,14}$/', message: 'Invalid phone number format (E.164 expected)')]
+    #[Assert\Regex(pattern: '/^\+[1-9]\d{1,14}$/', message: 'Invalid phone number format (E.164 expected)')]
     public string $phone = '';
 
     #[Assert\Length(max: 20)]

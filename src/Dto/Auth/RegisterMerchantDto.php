@@ -23,7 +23,7 @@ class RegisterMerchantDto
     public string $lastName = '';
 
     #[Assert\NotBlank(message: 'Phone is required')]
-    #[Assert\Regex(pattern: '/^\+?[1-9]\d{1,14}$/', message: 'Invalid phone number format (E.164 expected)')]
+    #[Assert\Regex(pattern: '/^\+[1-9]\d{1,14}$/', message: 'Invalid phone number format (E.164 expected)')]
     public string $phone = '';
 
     #[Assert\NotBlank(message: 'Business name is required')]
@@ -39,7 +39,7 @@ class RegisterMerchantDto
     public string $address = '';
 
     #[Assert\NotBlank(message: 'Business phone is required')]
-    #[Assert\Regex(pattern: '/^\+?[1-9]\d{1,14}$/', message: 'Invalid phone number format')]
+    #[Assert\Regex(pattern: '/^\+[1-9]\d{1,14}$/', message: 'Invalid phone number format')]
     public string $phoneForBusiness = '';
 
     #[Assert\NotBlank(message: 'Tax ID is required')]
