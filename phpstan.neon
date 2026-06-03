@@ -1,0 +1,12 @@
+includes:
+    - phpstan-baseline.neon
+
+parameters:
+    level: 6
+    paths:
+        - src
+    excludePaths:
+        - src/DataFixtures
+        - src/Story
+    symfony:
+        containerXmlPath: var/cache/dev/App_KernelDevDebugContainer.xml

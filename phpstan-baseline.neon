@@ -1,0 +1,931 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^Property App\\Dto\\Ai\\AnalyticsInsightsRequestDto\:\:\$stats type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Dto/Ai/AnalyticsInsightsRequestDto.php
+
+		-
+			message: '#^Property App\\Dto\\Ai\\RewardRecommendationsRequestDto\:\:\$availableRewards type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Dto/Ai/RewardRecommendationsRequestDto.php
+
+		-
+			message: '#^Property App\\Dto\\Ai\\RewardRecommendationsRequestDto\:\:\$stampCards type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Dto/Ai/RewardRecommendationsRequestDto.php
+
+		-
+			message: '#^Property App\\Dto\\Merchant\\UpdateMerchantProfileDto\:\:\$verificationDocuments type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Dto/Merchant/UpdateMerchantProfileDto.php
+
+		-
+			message: '#^Method App\\Entity\\Customer\:\:getNotifications\(\) return type with generic interface Doctrine\\Common\\Collections\\Collection does not specify its types\: TKey, T$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Entity/Customer.php
+
+		-
+			message: '#^Method App\\Entity\\Customer\:\:getPreferences\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Entity/Customer.php
+
+		-
+			message: '#^Method App\\Entity\\Customer\:\:getRedemptions\(\) return type with generic interface Doctrine\\Common\\Collections\\Collection does not specify its types\: TKey, T$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Entity/Customer.php
+
+		-
+			message: '#^Method App\\Entity\\Customer\:\:getStampCards\(\) return type with generic interface Doctrine\\Common\\Collections\\Collection does not specify its types\: TKey, T$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Entity/Customer.php
+
+		-
+			message: '#^Method App\\Entity\\Customer\:\:setPreferences\(\) has parameter \$preferences with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Entity/Customer.php
+
+		-
+			message: '#^Property App\\Entity\\Customer\:\:\$notifications type mapping mismatch\: property can contain Doctrine\\Common\\Collections\\Collection but database expects Doctrine\\Common\\Collections\\Collection&iterable\<App\\Entity\\Notification\>\.$#'
+			identifier: doctrine.associationType
+			count: 1
+			path: src/Entity/Customer.php
+
+		-
+			message: '#^Property App\\Entity\\Customer\:\:\$notifications with generic interface Doctrine\\Common\\Collections\\Collection does not specify its types\: TKey, T$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Entity/Customer.php
+
+		-
+			message: '#^Property App\\Entity\\Customer\:\:\$preferences type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Entity/Customer.php
+
+		-
+			message: '#^Property App\\Entity\\Customer\:\:\$redemptions type mapping mismatch\: property can contain Doctrine\\Common\\Collections\\Collection but database expects Doctrine\\Common\\Collections\\Collection&iterable\<App\\Entity\\RewardRedemption\>\.$#'
+			identifier: doctrine.associationType
+			count: 1
+			path: src/Entity/Customer.php
+
+		-
+			message: '#^Property App\\Entity\\Customer\:\:\$redemptions with generic interface Doctrine\\Common\\Collections\\Collection does not specify its types\: TKey, T$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Entity/Customer.php
+
+		-
+			message: '#^Property App\\Entity\\Customer\:\:\$stampCards type mapping mismatch\: property can contain Doctrine\\Common\\Collections\\Collection but database expects Doctrine\\Common\\Collections\\Collection&iterable\<App\\Entity\\StampCard\>\.$#'
+			identifier: doctrine.associationType
+			count: 1
+			path: src/Entity/Customer.php
+
+		-
+			message: '#^Property App\\Entity\\Customer\:\:\$stampCards with generic interface Doctrine\\Common\\Collections\\Collection does not specify its types\: TKey, T$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Entity/Customer.php
+
+		-
+			message: '#^Method App\\Entity\\Merchant\:\:getNotifications\(\) return type with generic interface Doctrine\\Common\\Collections\\Collection does not specify its types\: TKey, T$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Entity/Merchant.php
+
+		-
+			message: '#^Method App\\Entity\\Merchant\:\:getPreferences\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Entity/Merchant.php
+
+		-
+			message: '#^Method App\\Entity\\Merchant\:\:getRewards\(\) return type with generic interface Doctrine\\Common\\Collections\\Collection does not specify its types\: TKey, T$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Entity/Merchant.php
+
+		-
+			message: '#^Method App\\Entity\\Merchant\:\:getStampCards\(\) return type with generic interface Doctrine\\Common\\Collections\\Collection does not specify its types\: TKey, T$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Entity/Merchant.php
+
+		-
+			message: '#^Method App\\Entity\\Merchant\:\:getVerificationDocuments\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Entity/Merchant.php
+
+		-
+			message: '#^Method App\\Entity\\Merchant\:\:setPreferences\(\) has parameter \$preferences with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Entity/Merchant.php
+
+		-
+			message: '#^Method App\\Entity\\Merchant\:\:setVerificationDocuments\(\) has parameter \$verificationDocuments with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Entity/Merchant.php
+
+		-
+			message: '#^Property App\\Entity\\Merchant\:\:\$notifications type mapping mismatch\: property can contain Doctrine\\Common\\Collections\\Collection but database expects Doctrine\\Common\\Collections\\Collection&iterable\<App\\Entity\\Notification\>\.$#'
+			identifier: doctrine.associationType
+			count: 1
+			path: src/Entity/Merchant.php
+
+		-
+			message: '#^Property App\\Entity\\Merchant\:\:\$notifications with generic interface Doctrine\\Common\\Collections\\Collection does not specify its types\: TKey, T$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Entity/Merchant.php
+
+		-
+			message: '#^Property App\\Entity\\Merchant\:\:\$preferences type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Entity/Merchant.php
+
+		-
+			message: '#^Property App\\Entity\\Merchant\:\:\$rewards type mapping mismatch\: property can contain Doctrine\\Common\\Collections\\Collection but database expects Doctrine\\Common\\Collections\\Collection&iterable\<App\\Entity\\Reward\>\.$#'
+			identifier: doctrine.associationType
+			count: 1
+			path: src/Entity/Merchant.php
+
+		-
+			message: '#^Property App\\Entity\\Merchant\:\:\$rewards with generic interface Doctrine\\Common\\Collections\\Collection does not specify its types\: TKey, T$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Entity/Merchant.php
+
+		-
+			message: '#^Property App\\Entity\\Merchant\:\:\$stampCards type mapping mismatch\: property can contain Doctrine\\Common\\Collections\\Collection but database expects Doctrine\\Common\\Collections\\Collection&iterable\<App\\Entity\\StampCard\>\.$#'
+			identifier: doctrine.associationType
+			count: 1
+			path: src/Entity/Merchant.php
+
+		-
+			message: '#^Property App\\Entity\\Merchant\:\:\$stampCards with generic interface Doctrine\\Common\\Collections\\Collection does not specify its types\: TKey, T$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Entity/Merchant.php
+
+		-
+			message: '#^Property App\\Entity\\Merchant\:\:\$verificationDocuments type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Entity/Merchant.php
+
+		-
+			message: '#^Method App\\Entity\\MerchantCategory\:\:getMerchants\(\) return type with generic interface Doctrine\\Common\\Collections\\Collection does not specify its types\: TKey, T$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Entity/MerchantCategory.php
+
+		-
+			message: '#^Property App\\Entity\\MerchantCategory\:\:\$merchants type mapping mismatch\: property can contain Doctrine\\Common\\Collections\\Collection but database expects Doctrine\\Common\\Collections\\Collection&iterable\<App\\Entity\\Merchant\>\.$#'
+			identifier: doctrine.associationType
+			count: 1
+			path: src/Entity/MerchantCategory.php
+
+		-
+			message: '#^Property App\\Entity\\MerchantCategory\:\:\$merchants with generic interface Doctrine\\Common\\Collections\\Collection does not specify its types\: TKey, T$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Entity/MerchantCategory.php
+
+		-
+			message: '#^Method App\\Entity\\Notification\:\:getChannels\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Entity/Notification.php
+
+		-
+			message: '#^Method App\\Entity\\Notification\:\:getMetadata\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Entity/Notification.php
+
+		-
+			message: '#^Method App\\Entity\\Notification\:\:setChannels\(\) has parameter \$channels with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Entity/Notification.php
+
+		-
+			message: '#^Method App\\Entity\\Notification\:\:setMetadata\(\) has parameter \$metadata with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Entity/Notification.php
+
+		-
+			message: '#^Property App\\Entity\\Notification\:\:\$channels type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Entity/Notification.php
+
+		-
+			message: '#^Property App\\Entity\\Notification\:\:\$metadata type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Entity/Notification.php
+
+		-
+			message: '#^Method App\\Entity\\Payment\:\:getMetadata\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Entity/Payment.php
+
+		-
+			message: '#^Method App\\Entity\\Payment\:\:setMetadata\(\) has parameter \$metadata with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Entity/Payment.php
+
+		-
+			message: '#^Property App\\Entity\\Payment\:\:\$metadata type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Entity/Payment.php
+
+		-
+			message: '#^Method App\\Entity\\Reward\:\:getMetadata\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Entity/Reward.php
+
+		-
+			message: '#^Method App\\Entity\\Reward\:\:getRedemptions\(\) return type with generic interface Doctrine\\Common\\Collections\\Collection does not specify its types\: TKey, T$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Entity/Reward.php
+
+		-
+			message: '#^Method App\\Entity\\Reward\:\:setMetadata\(\) has parameter \$metadata with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Entity/Reward.php
+
+		-
+			message: '#^Property App\\Entity\\Reward\:\:\$metadata type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Entity/Reward.php
+
+		-
+			message: '#^Property App\\Entity\\Reward\:\:\$redemptions type mapping mismatch\: property can contain Doctrine\\Common\\Collections\\Collection but database expects Doctrine\\Common\\Collections\\Collection&iterable\<App\\Entity\\RewardRedemption\>\.$#'
+			identifier: doctrine.associationType
+			count: 1
+			path: src/Entity/Reward.php
+
+		-
+			message: '#^Property App\\Entity\\Reward\:\:\$redemptions with generic interface Doctrine\\Common\\Collections\\Collection does not specify its types\: TKey, T$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Entity/Reward.php
+
+		-
+			message: '#^Method App\\Entity\\RewardRedemption\:\:getMetadata\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Entity/RewardRedemption.php
+
+		-
+			message: '#^Method App\\Entity\\RewardRedemption\:\:setMetadata\(\) has parameter \$metadata with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Entity/RewardRedemption.php
+
+		-
+			message: '#^Property App\\Entity\\RewardRedemption\:\:\$metadata type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Entity/RewardRedemption.php
+
+		-
+			message: '#^Method App\\Entity\\Stamp\:\:getMetadata\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Entity/Stamp.php
+
+		-
+			message: '#^Method App\\Entity\\Stamp\:\:setMetadata\(\) has parameter \$metadata with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Entity/Stamp.php
+
+		-
+			message: '#^Property App\\Entity\\Stamp\:\:\$metadata type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Entity/Stamp.php
+
+		-
+			message: '#^Method App\\Entity\\StampCard\:\:getMetadata\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Entity/StampCard.php
+
+		-
+			message: '#^Method App\\Entity\\StampCard\:\:getStamps\(\) return type with generic interface Doctrine\\Common\\Collections\\Collection does not specify its types\: TKey, T$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Entity/StampCard.php
+
+		-
+			message: '#^Method App\\Entity\\StampCard\:\:setMetadata\(\) has parameter \$metadata with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Entity/StampCard.php
+
+		-
+			message: '#^Property App\\Entity\\StampCard\:\:\$metadata type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Entity/StampCard.php
+
+		-
+			message: '#^Property App\\Entity\\StampCard\:\:\$stamps type mapping mismatch\: property can contain Doctrine\\Common\\Collections\\Collection but database expects Doctrine\\Common\\Collections\\Collection&iterable\<App\\Entity\\Stamp\>\.$#'
+			identifier: doctrine.associationType
+			count: 1
+			path: src/Entity/StampCard.php
+
+		-
+			message: '#^Property App\\Entity\\StampCard\:\:\$stamps with generic interface Doctrine\\Common\\Collections\\Collection does not specify its types\: TKey, T$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Entity/StampCard.php
+
+		-
+			message: '#^Method App\\Entity\\Transaction\:\:getMetadata\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Entity/Transaction.php
+
+		-
+			message: '#^Method App\\Entity\\Transaction\:\:setMetadata\(\) has parameter \$metadata with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Entity/Transaction.php
+
+		-
+			message: '#^Property App\\Entity\\Transaction\:\:\$metadata type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Entity/Transaction.php
+
+		-
+			message: '#^Method App\\Entity\\User\:\:setRoles\(\) has parameter \$roles with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Entity/User.php
+
+		-
+			message: '#^Property App\\Entity\\User\:\:\$roles type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Entity/User.php
+
+		-
+			message: '#^Call to an undefined method Faker\\Generator\:\:state\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/Factory/CustomerFactory.php
+
+		-
+			message: '#^Call to an undefined method Faker\\Generator\:\:state\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/Factory/MerchantFactory.php
+
+		-
+			message: '#^Method App\\Message\\SendPushNotificationMessage\:\:__construct\(\) has parameter \$data with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Message/SendPushNotificationMessage.php
+
+		-
+			message: '#^Class App\\Repository\\CustomerRepository extends generic class Doctrine\\Bundle\\DoctrineBundle\\Repository\\ServiceEntityRepository but does not specify its types\: T$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Repository/CustomerRepository.php
+
+		-
+			message: '#^Method App\\Repository\\CustomerRepository\:\:findActiveCustomers\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Repository/CustomerRepository.php
+
+		-
+			message: '#^Method App\\Repository\\CustomerRepository\:\:findByReferrer\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Repository/CustomerRepository.php
+
+		-
+			message: '#^Class App\\Repository\\MerchantCategoryRepository extends generic class Doctrine\\Bundle\\DoctrineBundle\\Repository\\ServiceEntityRepository but does not specify its types\: T$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Repository/MerchantCategoryRepository.php
+
+		-
+			message: '#^Method App\\Repository\\MerchantCategoryRepository\:\:findAllOrdered\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Repository/MerchantCategoryRepository.php
+
+		-
+			message: '#^Class App\\Repository\\MerchantRepository extends generic class Doctrine\\Bundle\\DoctrineBundle\\Repository\\ServiceEntityRepository but does not specify its types\: T$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Repository/MerchantRepository.php
+
+		-
+			message: '#^Method App\\Repository\\MerchantRepository\:\:findByStatus\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Repository/MerchantRepository.php
+
+		-
+			message: '#^Method App\\Repository\\MerchantRepository\:\:findNearby\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Repository/MerchantRepository.php
+
+		-
+			message: '#^Method App\\Repository\\MerchantRepository\:\:findPending\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Repository/MerchantRepository.php
+
+		-
+			message: '#^Method App\\Repository\\MerchantRepository\:\:findVerified\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Repository/MerchantRepository.php
+
+		-
+			message: '#^Class App\\Repository\\NotificationRepository extends generic class Doctrine\\Bundle\\DoctrineBundle\\Repository\\ServiceEntityRepository but does not specify its types\: T$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Repository/NotificationRepository.php
+
+		-
+			message: '#^Method App\\Repository\\NotificationRepository\:\:findByCustomer\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Repository/NotificationRepository.php
+
+		-
+			message: '#^Method App\\Repository\\NotificationRepository\:\:findUnreadByCustomer\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Repository/NotificationRepository.php
+
+		-
+			message: '#^Class App\\Repository\\OtpTokenRepository extends generic class Doctrine\\Bundle\\DoctrineBundle\\Repository\\ServiceEntityRepository but does not specify its types\: T$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Repository/OtpTokenRepository.php
+
+		-
+			message: '#^Class App\\Repository\\PaymentRepository extends generic class Doctrine\\Bundle\\DoctrineBundle\\Repository\\ServiceEntityRepository but does not specify its types\: T$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Repository/PaymentRepository.php
+
+		-
+			message: '#^Method App\\Repository\\PaymentRepository\:\:findFailedRetryable\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Repository/PaymentRepository.php
+
+		-
+			message: '#^Class App\\Repository\\RewardRedemptionRepository extends generic class Doctrine\\Bundle\\DoctrineBundle\\Repository\\ServiceEntityRepository but does not specify its types\: T$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Repository/RewardRedemptionRepository.php
+
+		-
+			message: '#^Method App\\Repository\\RewardRedemptionRepository\:\:findByCustomer\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Repository/RewardRedemptionRepository.php
+
+		-
+			message: '#^Method App\\Repository\\RewardRedemptionRepository\:\:findByMerchant\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Repository/RewardRedemptionRepository.php
+
+		-
+			message: '#^Method App\\Repository\\RewardRedemptionRepository\:\:findPending\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Repository/RewardRedemptionRepository.php
+
+		-
+			message: '#^Method App\\Repository\\RewardRedemptionRepository\:\:findPendingByCustomer\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Repository/RewardRedemptionRepository.php
+
+		-
+			message: '#^Class App\\Repository\\RewardRepository extends generic class Doctrine\\Bundle\\DoctrineBundle\\Repository\\ServiceEntityRepository but does not specify its types\: T$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Repository/RewardRepository.php
+
+		-
+			message: '#^Method App\\Repository\\RewardRepository\:\:findActiveByMerchant\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Repository/RewardRepository.php
+
+		-
+			message: '#^Method App\\Repository\\RewardRepository\:\:findNearby\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Repository/RewardRepository.php
+
+		-
+			message: '#^Method App\\Repository\\RewardRepository\:\:findNearbyWithDistance\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Repository/RewardRepository.php
+
+		-
+			message: '#^Method App\\Repository\\RewardRepository\:\:getTopByMerchant\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Repository/RewardRepository.php
+
+		-
+			message: '#^Method App\\Repository\\RewardRepository\:\:search\(\) has parameter \$filters with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Repository/RewardRepository.php
+
+		-
+			message: '#^Method App\\Repository\\RewardRepository\:\:search\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Repository/RewardRepository.php
+
+		-
+			message: '#^Class App\\Repository\\StampCardRepository extends generic class Doctrine\\Bundle\\DoctrineBundle\\Repository\\ServiceEntityRepository but does not specify its types\: T$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Repository/StampCardRepository.php
+
+		-
+			message: '#^Method App\\Repository\\StampCardRepository\:\:findByCustomer\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Repository/StampCardRepository.php
+
+		-
+			message: '#^Method App\\Repository\\StampCardRepository\:\:findExpired\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Repository/StampCardRepository.php
+
+		-
+			message: '#^Class App\\Repository\\StampRepository extends generic class Doctrine\\Bundle\\DoctrineBundle\\Repository\\ServiceEntityRepository but does not specify its types\: T$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Repository/StampRepository.php
+
+		-
+			message: '#^Method App\\Repository\\StampRepository\:\:findByStampCard\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Repository/StampRepository.php
+
+		-
+			message: '#^Method App\\Repository\\StampRepository\:\:findExpiredStamps\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Repository/StampRepository.php
+
+		-
+			message: '#^Class App\\Repository\\TransactionRepository extends generic class Doctrine\\Bundle\\DoctrineBundle\\Repository\\ServiceEntityRepository but does not specify its types\: T$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Repository/TransactionRepository.php
+
+		-
+			message: '#^Method App\\Repository\\TransactionRepository\:\:findByCustomer\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Repository/TransactionRepository.php
+
+		-
+			message: '#^Method App\\Repository\\TransactionRepository\:\:findByMerchant\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Repository/TransactionRepository.php
+
+		-
+			message: '#^Method App\\Repository\\TransactionRepository\:\:getPlatformTotals\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Repository/TransactionRepository.php
+
+		-
+			message: '#^Class App\\Repository\\UserRepository extends generic class Doctrine\\Bundle\\DoctrineBundle\\Repository\\ServiceEntityRepository but does not specify its types\: T$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Repository/UserRepository.php
+
+		-
+			message: '#^Class App\\Security\\UserProvider implements generic interface Symfony\\Component\\Security\\Core\\User\\UserProviderInterface but does not specify its types\: TUser$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Security/UserProvider.php
+
+		-
+			message: '#^Method App\\Service\\AnalyticsService\:\:getAdminStats\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Service/AnalyticsService.php
+
+		-
+			message: '#^Method App\\Service\\AnalyticsService\:\:getMerchantStats\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Service/AnalyticsService.php
+
+		-
+			message: '#^Call to an undefined method App\\Entity\\User\:\:setBusinessName\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/Service/AuthService.php
+
+		-
+			message: '#^Method App\\Service\\AuthService\:\:buildTokenResponse\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Service/AuthService.php
+
+		-
+			message: '#^Method App\\Service\\AuthService\:\:login\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Service/AuthService.php
+
+		-
+			message: '#^Method App\\Service\\AuthService\:\:loginWithPhoneOtp\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Service/AuthService.php
+
+		-
+			message: '#^Method App\\Service\\AuthService\:\:refreshToken\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Service/AuthService.php
+
+		-
+			message: '#^Method App\\Service\\AuthService\:\:registerCustomer\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Service/AuthService.php
+
+		-
+			message: '#^Method App\\Service\\AuthService\:\:registerMerchant\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Service/AuthService.php
+
+		-
+			message: '#^Method App\\Service\\AuthService\:\:serializeUser\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Service/AuthService.php
+
+		-
+			message: '#^Method App\\Service\\ClaudeAiService\:\:getAnalyticsInsights\(\) has parameter \$stats with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Service/ClaudeAiService.php
+
+		-
+			message: '#^Method App\\Service\\ClaudeAiService\:\:getRewardRecommendations\(\) has parameter \$availableRewards with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Service/ClaudeAiService.php
+
+		-
+			message: '#^Method App\\Service\\ClaudeAiService\:\:getRewardRecommendations\(\) has parameter \$stampCards with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Service/ClaudeAiService.php
+
+		-
+			message: '#^Method App\\Service\\ClaudeAiService\:\:getRewardRecommendations\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Service/ClaudeAiService.php
+
+		-
+			message: '#^Method App\\Service\\ClaudeAiService\:\:suggestReward\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Service/ClaudeAiService.php
+
+		-
+			message: '#^Method App\\Service\\JwtService\:\:decode\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Service/JwtService.php
+
+		-
+			message: '#^Method App\\Service\\MerchantOnboardingService\:\:serialize\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Service/MerchantOnboardingService.php
+
+		-
+			message: '#^Access to an undefined property Razorpay\\Api\\Api\:\:\$order\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Service/PaymentService.php
+
+		-
+			message: '#^Access to an undefined property Razorpay\\Api\\Api\:\:\$utility\.$#'
+			identifier: property.notFound
+			count: 2
+			path: src/Service/PaymentService.php
+
+		-
+			message: '#^Method App\\Service\\PaymentService\:\:createSubscriptionOrder\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Service/PaymentService.php
+
+		-
+			message: '#^Method App\\Service\\PaymentService\:\:getMerchantPayments\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Service/PaymentService.php
+
+		-
+			message: '#^Method App\\Service\\PaymentService\:\:handleCaptured\(\) has parameter \$paymentData with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Service/PaymentService.php
+
+		-
+			message: '#^Method App\\Service\\PaymentService\:\:handleFailed\(\) has parameter \$paymentData with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Service/PaymentService.php
+
+		-
+			message: '#^Method App\\Service\\PaymentService\:\:serializePayment\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Service/PaymentService.php
+
+		-
+			message: '#^Method App\\Service\\ReferralService\:\:getReferralStats\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Service/ReferralService.php
+
+		-
+			message: '#^Method App\\Service\\RewardService\:\:approveRedemption\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Service/RewardService.php
+
+		-
+			message: '#^Method App\\Service\\RewardService\:\:buildPendingRedemptionSet\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Service/RewardService.php
+
+		-
+			message: '#^Method App\\Service\\RewardService\:\:buildStampCountMap\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Service/RewardService.php
+
+		-
+			message: '#^Method App\\Service\\RewardService\:\:createReward\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Service/RewardService.php
+
+		-
+			message: '#^Method App\\Service\\RewardService\:\:getCustomerRedemptions\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Service/RewardService.php
+
+		-
+			message: '#^Method App\\Service\\RewardService\:\:getMerchantRedemptions\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Service/RewardService.php
+
+		-
+			message: '#^Method App\\Service\\RewardService\:\:getMerchantRewards\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Service/RewardService.php
+
+		-
+			message: '#^Method App\\Service\\RewardService\:\:listActiveRewards\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Service/RewardService.php
+
+		-
+			message: '#^Method App\\Service\\RewardService\:\:redeemReward\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Service/RewardService.php
+
+		-
+			message: '#^Method App\\Service\\RewardService\:\:serializeRedemption\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Service/RewardService.php
+
+		-
+			message: '#^Method App\\Service\\RewardService\:\:serializeReward\(\) has parameter \$pendingRedemptionSet with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Service/RewardService.php
+
+		-
+			message: '#^Method App\\Service\\RewardService\:\:serializeReward\(\) has parameter \$stampCountByMerchant with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Service/RewardService.php
+
+		-
+			message: '#^Method App\\Service\\RewardService\:\:serializeReward\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Service/RewardService.php
+
+		-
+			message: '#^Method App\\Service\\SocialAuthService\:\:loginWithGoogle\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Service/SocialAuthService.php
+
+		-
+			message: '#^Method App\\Service\\StampService\:\:activeStampsForCard\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Service/StampService.php
+
+		-
+			message: '#^Method App\\Service\\StampService\:\:getCustomerCard\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Service/StampService.php
+
+		-
+			message: '#^Method App\\Service\\StampService\:\:getCustomerCardDetail\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Service/StampService.php
+
+		-
+			message: '#^Method App\\Service\\StampService\:\:getCustomerCards\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Service/StampService.php
+
+		-
+			message: '#^Method App\\Service\\StampService\:\:issueStamps\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Service/StampService.php
+
+		-
+			message: '#^Method App\\Service\\StampService\:\:serializeStamp\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Service/StampService.php
+
+		-
+			message: '#^Method App\\Service\\StampService\:\:serializeStampCard\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Service/StampService.php

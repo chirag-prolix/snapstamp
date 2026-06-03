@@ -15,3 +15,4 @@
 /.phpunit.cache/
 ###< phpunit/phpunit ###
 config/jwt/
+docker/nginx/certs/
