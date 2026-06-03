@@ -58,6 +58,25 @@ services:
       - db
       - nginx
 
+  messenger:
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+    container_name: snapstamp_messenger
+    restart: unless-stopped
+    command: php bin/console messenger:consume async --time-limit=3600 -vv
+    volumes:
+      - .:/var/www/html
+      - ./var:/var/www/html/var
+    depends_on:
+      - db
+      - redis
+      - rabbitmq
+    environment:
+      APP_ENV: dev
+      DATABASE_URL: mysql://snapstamp_user:snapstamp_pass@db:3306/snapstamp_db?serverVersion=8.0&charset=utf8mb4
+      REDIS_URL: redis://redis:6379
+
   redis:
     image: redis:7-alpine
     container_name: snapstamp_redis
