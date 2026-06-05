@@ -72,6 +72,7 @@ class UserFixtures extends Fixture implements FixtureGroupInterface, DependentFi
             'phone'     => '+919000000001',
             'firstName' => 'Admin',
             'lastName'  => 'User',
+            'displayName' => 'Admin User',
             'roles'     => ['ROLE_ADMIN'],
         ]);
 
@@ -91,7 +92,10 @@ class UserFixtures extends Fixture implements FixtureGroupInterface, DependentFi
         }
 
         foreach (self::CUSTOMERS as $index => $data) {
-            $customer = CustomerFactory::createOne($data);
+            $customer = CustomerFactory::createOne([
+                ...$data,
+                'displayName' => $data['firstName'] . ' ' . $data['lastName'],
+            ]);
             $this->addReference(self::CUSTOMER_REFERENCE . '.' . ($index + 1), $customer);
         }
     }

@@ -4,12 +4,12 @@ namespace App\Controller\Api;
 
 use App\Dto\Auth\GoogleLoginDto;
 use App\Dto\Auth\LoginDto;
-use App\Dto\Auth\SetPhoneDto;
 use App\Dto\Auth\LoginPhoneRequestDto;
 use App\Dto\Auth\LoginPhoneVerifyDto;
 use App\Dto\Auth\RefreshTokenDto;
 use App\Dto\Auth\RegisterCustomerDto;
 use App\Dto\Auth\RegisterMerchantDto;
+use App\Dto\Auth\SetPhoneDto;
 use App\Entity\User;
 use App\Service\AuthService;
 use App\Service\SocialAuthService;
@@ -19,6 +19,9 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Symfony\Component\Security\Core\Exception\BadCredentialsException;
+use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
@@ -178,7 +181,7 @@ class AuthController extends AbstractController
             $this->authService->requestPhoneLoginOtp($dto->phone);
         } catch (\DomainException $e) {
             return $this->fail($e->getMessage(), Response::HTTP_UNPROCESSABLE_ENTITY);
-        } catch (\Symfony\Component\Security\Core\Exception\AuthenticationException $e) {
+        } catch (AuthenticationException $e) {
             return $this->fail($e->getMessage(), Response::HTTP_UNAUTHORIZED);
         }
 
@@ -198,7 +201,7 @@ class AuthController extends AbstractController
             $result = $this->authService->loginWithPhoneOtp($dto->phone, $dto->code);
         } catch (\DomainException $e) {
             return $this->fail($e->getMessage(), Response::HTTP_BAD_REQUEST);
-        } catch (\Symfony\Component\Security\Core\Exception\AuthenticationException $e) {
+        } catch (AuthenticationException $e) {
             return $this->fail($e->getMessage(), Response::HTTP_UNAUTHORIZED);
         }
 
@@ -236,11 +239,9 @@ class AuthController extends AbstractController
 
         try {
             $result = $this->authService->login($dto);
-        } catch (\Symfony\Component\Security\Core\Exception\UserNotFoundException) {
+        } catch (UserNotFoundException | BadCredentialsException) {
             return $this->fail('Invalid credentials.', Response::HTTP_UNAUTHORIZED);
-        } catch (\Symfony\Component\Security\Core\Exception\BadCredentialsException) {
-            return $this->fail('Invalid credentials.', Response::HTTP_UNAUTHORIZED);
-        } catch (\Symfony\Component\Security\Core\Exception\AuthenticationException $e) {
+        } catch (AuthenticationException $e) {
             return $this->fail($e->getMessage(), Response::HTTP_UNAUTHORIZED);
         }
 
@@ -276,7 +277,7 @@ class AuthController extends AbstractController
 
         try {
             $result = $this->authService->refreshToken($dto->refreshToken);
-        } catch (\Symfony\Component\Security\Core\Exception\AuthenticationException $e) {
+        } catch (AuthenticationException $e) {
             return $this->fail($e->getMessage(), Response::HTTP_UNAUTHORIZED);
         }
 

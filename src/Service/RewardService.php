@@ -142,13 +142,17 @@ class RewardService
             throw new \DomainException('Reward redemption limit reached.');
         }
 
-        $stampCard = $this->stampCardRepository->findCompletedByCustomerAndMerchant($customer, $reward->getMerchant());
+        $stampCard = $this->stampCardRepository->findActiveByCustomerAndMerchant($customer, $reward->getMerchant());
         if ($stampCard === null) {
-            throw new \DomainException('No completed stamp card found for this reward.');
+            throw new \DomainException('No stamp card found for this reward.');
         }
 
         if ($stampCard->isExpired()) {
             throw new \DomainException('Your stamp card has expired and cannot be redeemed.');
+        }
+
+        if ($stampCard->getCurrentStampCount() < $reward->getStampRequirement()) {
+            throw new \DomainException('Not enough stamps to redeem this reward.');
         }
 
         if ($this->redemptionRepository->findPendingByStampCard($stampCard) !== null) {
